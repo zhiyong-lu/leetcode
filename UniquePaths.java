@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 // 62. Unique Paths
 public class UniquePaths {
 
@@ -96,4 +98,24 @@ public class UniquePaths {
     	memo[m][n] = uniquePathsMemoHelper(memo, m-1, n) + uniquePathsMemoHelper(memo, m, n-1);
     	return memo[m][n] ;
     }
+    
+   public static int uniquePaths(int m, int n) {
+        int[][] dp = new int[m][n];
+        
+        Arrays.fill(dp[0], 1);
+        
+        for (int i = 0; i < m; i++) {
+        	dp[i][0] = 1;
+        }
+        
+        for (int i = 1; i < m; i++) {
+        	for (int j = 0; j < n; j++) {
+        		dp[i][j] = dp[i-1][j] + dp[i][j-1];
+        	}
+        }
+        
+        return dp[m-1][n-1];
+   }
+    
+    
 }
