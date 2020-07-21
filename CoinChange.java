@@ -5,8 +5,9 @@ public class CoinChange {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		coinChangeIterative(new int[] {1, 2, 5}, 11);
+//		coinChangeIterative(new int[] {1, 2, 5}, 11);
 //		coinChangeIterative(new int[] {2}, 3);
+		coinChangeIterative(new int[] {2147483647}, 2);
 	}
 	
 //	https://www.youtube.com/watch?v=EM9YWv1hBSk
@@ -43,18 +44,20 @@ public class CoinChange {
 	}
 	
 	public static int coinChangeIterative(int[] coins, int amount) {
-		int[] dp = new int[amount+1];
-		Arrays.fill(dp, 1, amount+1, Integer.MAX_VALUE-1);
-//		dp[0] = 0;
-		
-	
-		for (int i=0; i < amount; ++i) {
-			for (int coin : coins) {
-				if ((i+coin) <= amount)
-					dp[i+coin] = Math.min(dp[i+coin], dp[i]+1);
+		 if (amount < 0) return -1;
+	        
+	        int[] dp = new int[amount+1];
+			Arrays.fill(dp, 1, amount+1, Integer.MAX_VALUE-1);
+//			dp[0] = 0;
+
+			for (int i=0; i < amount; ++i) {
+				for (int coin : coins) {
+					if (coin <= amount - i)
+						dp[i+coin] = Math.min(dp[i+coin], dp[i] + 1);
+				}
 			}
-		}
-		return  dp[amount];
+	        
+	        return dp[amount] == Integer.MAX_VALUE-1?-1:dp[amount];
 	}
 	
 
@@ -76,4 +79,23 @@ public class CoinChange {
 //        }
 //        return dp[amount];
 //    }
+	
+	public static int coinChangeIterativeAgain(int[] coins, int amount) {
+		int[] dp = new int[amount+1];
+		
+		Arrays.fill(dp, 1, amount + 1, amount+1); //dp[0] = 0;
+		
+		for (int slotMoneyValue = 0; slotMoneyValue <= amount; slotMoneyValue++ ) {
+			for (int coin : coins) {
+				if (coin < slotMoneyValue) {
+					dp[slotMoneyValue] = Math.min(dp[slotMoneyValue], dp[slotMoneyValue-coin]+1);
+				}
+			}
+		}
+		return dp[amount]==amount+1? -1: dp[amount];
+	}
+	
+	
+	
+	
 }

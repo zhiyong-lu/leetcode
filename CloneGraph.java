@@ -1,9 +1,13 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 
 //133. Clone Graph
 public class CloneGraph {
@@ -76,4 +80,34 @@ public class CloneGraph {
           return map.get(node);	
     }
 
+    public static GraphNode cloneGraph(GraphNode node) {
+    	if (node == null) return null;
+    	Map<GraphNode, GraphNode> map = new HashMap<>(0);
+    	Deque<GraphNode> deque = new ArrayDeque<>();
+    	
+    	deque.offer(node);
+    	while (!deque.isEmpty()) {
+    		GraphNode curr = deque.poll();
+    		if (!map.containsKey(curr)) {
+    			map.put(curr, new GraphNode(curr.val));
+    		}
+    		List<GraphNode> neighbors = curr.neighbors;
+    		for (GraphNode neighbor_node : neighbors) {
+    			if (!map.containsKey(neighbor_node))
+    				deque.offer(neighbor_node);
+    		}
+    	}
+    	
+    	Set<GraphNode> nodekeySet = map.keySet();
+    	Iterator<GraphNode> it = nodekeySet.iterator();
+    	while (it.hasNext()) {
+    		GraphNode originalNode = it.next();
+    		GraphNode newNode = map.get(originalNode);
+    		for (GraphNode oriNode : originalNode.neighbors) {
+    			newNode.neighbors.add(map.get(oriNode));
+    		}
+    	}
+    	return map.get(node);
+    }
+    
 }
