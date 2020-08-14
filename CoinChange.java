@@ -13,6 +13,7 @@ public class CoinChange {
 	public static int coinChangeRecursive(int[] coins, int amount) {
 		int[] memo = new int[amount+1];
 		int result  = helper(coins, amount, memo);
+		System.out.println("Test");
 		return result;
 	}
 
